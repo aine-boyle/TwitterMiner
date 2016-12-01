@@ -12,15 +12,16 @@ import twitter4j.StatusDeletionNotice;
 import twitter4j.StatusListener;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
-import twitter4j.User;
 import twitter4j.conf.ConfigurationBuilder;
 
 public class TwitterMiner {
+	
+	final static String keyword = "Ireland";
 
 	public static void main(String[] args) {
 		
 		TwitterMiner twitterMiner = new TwitterMiner();
-		twitterMiner.getTweet("Ireland");
+		twitterMiner.getTweet(keyword);
 	}
 	
 	public Connection getConnection () {
@@ -52,40 +53,29 @@ public class TwitterMiner {
 	
 			Connection con = getConnection();
 			
-			public void onException(Exception arg0) {
-			}
-	
-			public void onDeletionNotice(StatusDeletionNotice arg0) {
-			}
-	
-			public void onScrubGeo(long arg0, long arg1) {
-			}
-	
 			public void onStatus(Status status) {
-				User user = status.getUser();
-				String username = status.getUser().getScreenName();
-				String loc = user.getLocation();
-				long tweetId = status.getId();
-				String content = status.getText();
-			
 				String addTweet = "INSERT INTO twitter_data (username, location, tweetid, content) VALUES (?, ?, ?, ?)";
 				try {
 					PreparedStatement stmt = con.prepareStatement(addTweet);
-					stmt.setString(1, username);
-					stmt.setString(2, loc);
-					stmt.setLong(3, tweetId);
-					stmt.setString(4, content);
+					stmt.setString(1, status.getUser().getScreenName());
+					stmt.setString(2, status.getUser().getLocation());
+					stmt.setLong(3, status.getId());
+					stmt.setString(4, status.getText());
 					stmt.executeUpdate();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 			}
 	
-			public void onTrackLimitationNotice(int arg0) {
-			}
+			public void onException(Exception arg0) {}
+			
+			public void onDeletionNotice(StatusDeletionNotice arg0) {}
 	
-			public void onStallWarning(StallWarning arg0) {
-			}
+			public void onScrubGeo(long arg0, long arg1) {}
+			
+			public void onTrackLimitationNotice(int arg0) {}
+	
+			public void onStallWarning(StallWarning arg0) {}
 		};
 		
 		FilterQuery fq = new FilterQuery();
