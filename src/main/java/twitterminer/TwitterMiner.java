@@ -16,7 +16,7 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class TwitterMiner {
 	
-	final static String keyword = "porn";
+	final static String keyword = "ireland";
 
 	public static void main(String[] args) {
 		
