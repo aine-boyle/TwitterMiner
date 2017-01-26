@@ -16,7 +16,7 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class TwitterMiner {
 	
-	final static String keyword = "Ireland";
+	final static String keyword = "porn";
 
 	public static void main(String[] args) {
 		
@@ -61,6 +61,7 @@ public class TwitterMiner {
 					stmt.setString(2, status.getUser().getLocation());
 					stmt.setLong(3, status.getId());
 					stmt.setString(4, status.getText());
+					System.out.println(status.getText().toString());
 					stmt.executeUpdate();
 				} catch (SQLException e) {
 					e.printStackTrace();
